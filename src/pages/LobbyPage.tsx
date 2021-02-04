@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 const LobbyPage: React.FC<RouteComponentProps> = () => {
-  return <div className="container mx-auto">this is a lobby</div>;
+  const [text, setText] = useState<string>('initialState');
+
+  return (
+    <div className="container mx-auto">
+      <div>
+        <form>
+          <input
+            type="text"
+            value={text}
+            onChange={(event) => {
+              setText(event.target.value);
+            }}
+          />
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default LobbyPage;
