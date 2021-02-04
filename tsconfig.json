@@ -19,6 +19,7 @@
         "validate": false
       }
     ],
+    "baseUrl": "./src/",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
