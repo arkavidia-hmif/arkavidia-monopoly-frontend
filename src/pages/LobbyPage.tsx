@@ -30,8 +30,8 @@ const LobbyPage: React.FC<RouteComponentProps> = () => {
   );
   const onSubmit = ({ boardId }: BoardForm) => {
     socket?.emit(LobbyEvent.START, boardId);
-    navigate('/game');
   };
+
   const fetchPlayers = useCallback(() => {
     socket?.emit(LobbyEvent.GET_PLAYERS_IN_LOBBY);
   }, []);
@@ -40,6 +40,9 @@ const LobbyPage: React.FC<RouteComponentProps> = () => {
     fetchPlayers();
     socket?.on(LobbyEvent.GET_PLAYERS_IN_LOBBY, (pawns: Pawn[]) => {
       setPlayers(pawns);
+    });
+    socket?.once(LobbyEvent.GAME_STARTED, (board: Board) => {
+      navigate('/game', { state: { board } });
     });
   }, []);
 
