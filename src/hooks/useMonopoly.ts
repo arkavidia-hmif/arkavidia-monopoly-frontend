@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { SocketContext } from '~/contexts/SocketContext';
 import { GameEvent } from '~/events/GameEvent';
 import { Pawn } from '~/models/Pawn';
+import { Problem } from '~/models/Problem';
 
 export const useMonopoly = () => {
   // const [board, setBoard] = useState<Board | null>(null);
@@ -10,7 +11,7 @@ export const useMonopoly = () => {
   const [dice, setDice] = useState<number>(-1);
   const [isRolling, setRolling] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
-  const [question, setQuestion] = useState<string>('');
+  const [problem, setProblem] = useState<Problem | null>(null);
 
   useEffect(() => {
     socket.emit(GameEvent.START_TURN);
@@ -57,28 +58,30 @@ export const useMonopoly = () => {
     // On receiving event by landing on a property tile
     socket.on(GameEvent.PROPERTY_TILE, () => {
       console.log(`Received event ${GameEvent.PROPERTY_TILE}`);
-      emitEvent(GameEvent.END_TURN);
+      emitEvent(GameEvent.PROPERTY_TILE);
     });
 
     socket.on(GameEvent.GIVE_PROBLEM, () => {
       console.log(`Received event ${GameEvent.GIVE_PROBLEM}`);
-      // setQuestion()
-      emitEvent(GameEvent.END_TURN);
+      emitEvent(GameEvent.GIVE_PROBLEM);
     });
 
-    socket.on(GameEvent.ANSWER_PROBLEM, () => {
-      console.log(`Received event ${GameEvent.ANSWER_PROBLEM}`);
-      emitEvent(GameEvent.END_TURN);
+    socket.on(GameEvent.PROBLEM, (problem: Problem) => {
+      console.log(`Received event ${GameEvent.PROBLEM}`);
+      setProblem(problem);
+      // emitEvent(GameEvent.END_TURN);
     });
 
     socket.on(GameEvent.CORRECT_ANSWER, () => {
       console.log(`Received event ${GameEvent.CORRECT_ANSWER}`);
-      emitEvent(GameEvent.END_TURN);
+      setProblem(null);
+      emitEvent(GameEvent.CORRECT_ANSWER);
     });
 
     socket.on(GameEvent.WRONG_ANSWER, () => {
       console.log(`Received event ${GameEvent.WRONG_ANSWER}`);
-      emitEvent(GameEvent.END_TURN);
+      setProblem(null);
+      emitEvent(GameEvent.WRONG_ANSWER);
     });
 
     socket.on(GameEvent.POWER_UP_GET_ADD_POINTS, () => {
@@ -118,13 +121,13 @@ export const useMonopoly = () => {
     } else {
       socket.emit(eventName);
     }
-    setMessage(eventName);
+    // setMessage(eventName);
   };
 
   return {
     pawnList,
     message,
-    question,
+    problem,
     dice,
     isRolling,
     setRolling,

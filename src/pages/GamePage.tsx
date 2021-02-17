@@ -7,10 +7,16 @@ import GameBoard from '~/components/GameBoard';
 import { GameEvent } from '~/events/GameEvent';
 import { Pawn } from '~/models/Pawn';
 import { useMonopoly } from '~/hooks/useMonopoly';
+import { useForm } from 'react-hook-form';
+
+type QuestionForm = {
+  answer: number;
+};
 
 const GamePage: React.FC<RouteComponentProps> = ({ location }) => {
   // const [board, setBoard] = useState<Board | null>(null);
   const board = (location?.state as { board: Board }).board;
+  const { handleSubmit, register, reset } = useForm();
   const {
     dice,
     isRolling,
@@ -18,7 +24,13 @@ const GamePage: React.FC<RouteComponentProps> = ({ location }) => {
     pawnList,
     emitEvent,
     message,
+    problem,
   } = useMonopoly();
+
+  const onSubmit = (data: QuestionForm) => {
+    emitEvent<number>(GameEvent.ANSWER_PROBLEM, data.answer);
+    reset();
+  };
 
   return (
     <div>
@@ -36,8 +48,26 @@ const GamePage: React.FC<RouteComponentProps> = ({ location }) => {
           setRolling(false);
         }}
       >
-        roll dice
+        Roll dice!
       </button>
+      <div>
+        {problem && (
+          <div>
+            <div>{problem.statement}</div>
+            <div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <input name="answer" ref={register} />
+                <button
+                  type="submit"
+                  className="bg-blue-400 rounded px-4 py-2 text-white"
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
