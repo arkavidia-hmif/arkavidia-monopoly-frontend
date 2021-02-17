@@ -32,3 +32,18 @@ export const GameEvent = {
   POWER_UP_PICK_PROPERTY: 'GAME_powerUpPickPropertyToDisable',
   POWER_UP_PICK_PLAYER: 'GAME_powerUpPickPlayerToRemove',
 };
+
+// export type GameEventCallbackType = {
+//   eventName: string;
+//   callback: (data: never) => void;
+// };
+
+// export const GameEventCallback: GameEventCallbackType[] = [
+//   {
+//     eventName: GameEvent.INVALID_TURN,
+//     callback: (data: string): void => {
+//       console.log(`Received event ${GameEvent.INVALID_TURN}, ${data}`);
+//       console.log(data);
+//     },
+//   },
+// ];

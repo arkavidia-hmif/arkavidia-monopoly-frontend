@@ -6,40 +6,34 @@ import { Board } from '~/models/Board';
 import GameBoard from '~/components/GameBoard';
 import { GameEvent } from '~/events/GameEvent';
 import { Pawn } from '~/models/Pawn';
+import { useMonopoly } from '~/hooks/useMonopoly';
 
 const GamePage: React.FC<RouteComponentProps> = ({ location }) => {
   // const [board, setBoard] = useState<Board | null>(null);
-  const socket = useContext(SocketContext) as SocketIOClient.Socket;
   const board = (location?.state as { board: Board }).board;
-  const [pawnList, setPawnList] = useState<Pawn[]>([]);
-  const [dice, setDice] = useState<number>(-1);
-  const [isRollingDice, setRollingDice] = useState<boolean>(false);
-
-  useEffect(() => {
-    socket.emit(GameEvent.START_TURN);
-
-    // Receive event to move
-    socket.on(GameEvent.MOVE, (diceCount: number) => {
-      setDice(diceCount);
-      setRollingDice(true);
-    });
-
-    socket.on(GameEvent.PAWN_LIST, (pawns: Pawn[]) => {
-      console.log(pawns);
-      setPawnList(pawns);
-    });
-  }, [setPawnList]);
+  const {
+    dice,
+    isRolling,
+    setRolling,
+    pawnList,
+    emitEvent,
+    message,
+  } = useMonopoly();
 
   return (
     <div>
+      <div>Last emitted: {message}</div>
       <div>{dice} dots!</div>
       <GameBoard board={board} pawns={pawnList} />
       <button
-        className="rounded bg-blue-600 text-white"
+        disabled={!isRolling}
+        className={`rounded ${
+          isRolling ? 'bg-blue-600' : 'bg-gray-400'
+        } text-white px-2 py-2 outline-none`}
         onClick={() => {
-          if (isRollingDice) {
-            socket.emit(GameEvent.MOVE, dice);
-          }
+          emitEvent<number>(GameEvent.MOVE, dice);
+          console.log('Sent MOVE');
+          setRolling(false);
         }}
       >
         roll dice
