@@ -1,8 +1,6 @@
-import { Socket } from 'dgram';
 import React, { useContext, useEffect } from 'react';
 import { GameEvent } from '~/events/GameEvent';
 import { useGameState } from '~/hooks/useGameState';
-import { useMonopoly, IUseMonopoly } from '~/hooks/useMonopoly';
 import { Board } from '~/models/Board';
 import { GameState, GameStateObject } from '~/models/Game';
 import { SocketContext } from './SocketContext';
@@ -22,6 +20,7 @@ const MonopolyContextProvider: React.FC<Props> = ({ board, children }) => {
     pawnList: [],
     board,
     dialog: null,
+    canSelect: false,
   });
 
   useEffect(() => {

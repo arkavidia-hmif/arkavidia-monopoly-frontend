@@ -6,10 +6,12 @@ import GameTile from './GameTile';
 
 const GameBoard: React.FC = () => {
   const gameState = useContext(MonopolyContext);
-  const pawnInTile = (index: number): Pawn | null => {
+  const pawnsInTile = (index: number): Pawn[] | null => {
+    const result = [];
     for (const p of gameState.pawnList) {
-      if (p.position === index) return p;
+      if (p.position === index) result.push(p);
     }
+    if (result.length !== 0) return result;
     return null;
   };
 
@@ -17,15 +19,22 @@ const GameBoard: React.FC = () => {
     const result = [];
     for (let i = 0; i < b.tiles.length; i++) {
       result.push(
-        <GameTile pawn={pawnInTile(i)} tile={b.tiles[i]} key={`tile-${i}`} />
+        <GameTile
+          pawns={pawnsInTile(i)}
+          tile={b.tiles[i]}
+          index={i}
+          canSelect={gameState.canSelect}
+          key={`tile-${i}`}
+        />
       );
     }
     return result;
   };
+
   return (
-    <div className="flex p-2">
-      <div>{generateBoard(gameState.board)}</div>
-      <div>{gameState.dialog}</div>
+    <div className="flex flex-col items-center p-2">
+      <div className="flex">{generateBoard(gameState.board)}</div>
+      <div className="p-2">{gameState.dialog}</div>
     </div>
   );
 };

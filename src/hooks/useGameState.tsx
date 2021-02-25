@@ -1,4 +1,5 @@
 import { useContext, useEffect, useReducer } from 'react';
+import Dice from '~/components/Dice';
 import { SocketContext } from '~/contexts/SocketContext';
 import { GameEvent } from '~/events/GameEvent';
 import { GameState, GameStateObject } from '~/models/Game';
@@ -13,6 +14,7 @@ export type GameStateAction =
         | typeof GameEvent.PROPERTY_TILE
         | typeof GameEvent.FREE_PARKING_TILE
         | typeof GameEvent.FREE_PARKING_PICK_TILE
+        | typeof GameEvent.PROBLEM
         | typeof GameEvent.CORRECT_ANSWER
         | typeof GameEvent.WRONG_ANSWER
         | typeof GameEvent.END_TURN;
@@ -30,14 +32,14 @@ export const gameStateReducer = (
       pawnList: action.payload as Pawn[],
     };
   } else if (action.type === GameEvent.END_TURN) {
-    return { ...gameState, dialog: action.payload };
+    return { ...gameState, dialog: action.payload, canSelect: false };
   } else if (action.type === GameEvent.MOVE) {
     return {
       ...gameState,
       state: GameState.MOVE,
       dialog: action.payload,
     };
-  } else if (action.type === GameEvent.PROPERTY_TILE) {
+  } else if (action.type === GameEvent.PROBLEM) {
     return {
       ...gameState,
       state: GameState.PROBLEM,
@@ -54,6 +56,7 @@ export const gameStateReducer = (
       ...gameState,
       state: GameState.IDLE,
       dialog: action.payload,
+      canSelect: true,
     };
   } else if (
     action.type === GameEvent.CORRECT_ANSWER ||
@@ -100,17 +103,32 @@ export const useGameState = (
       gameStateDispatcher({
         type: GameEvent.MOVE,
         payload: (
-          <div>
-            Rolling dice get {diceCount}
-            <div>
-              <button
-                onClick={() => {
-                  socket.emit(GameEvent.MOVE, diceCount);
-                }}
-              >
-                ok
-              </button>
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+            <div className="flex">
+              {diceCount < 6 ? (
+                <div className="p-1">
+                  <Dice count={diceCount} />
+                </div>
+              ) : (
+                <>
+                  <div className="p-1">
+                    <Dice count={6} />
+                  </div>
+                  <div className="p-1">
+                    <Dice count={diceCount - 6} />
+                  </div>
+                </>
+              )}
             </div>
+            <div className="font-semibold">You rolled {diceCount}!</div>
+            <button
+              className="bg-blue-600 rounded text-white px-4 py-2"
+              onClick={() => {
+                socket.emit(GameEvent.MOVE, diceCount);
+              }}
+            >
+              Move pawn!
+            </button>
           </div>
         ),
       });
@@ -132,20 +150,20 @@ export const useGameState = (
 
     socket.on(GameEvent.FREE_PARKING_PICK_TILE, (tiles: Tile[]) => {
       console.log(`Received event ${GameEvent.FREE_PARKING_PICK_TILE}`);
-      // setSelectingTile(true);
       console.log(tiles);
       gameStateDispatcher({
         type: GameEvent.FREE_PARKING_PICK_TILE,
         payload: (
-          <div>
-            Nih mo pilih yang mana cok
-            {tiles.map((index) => {
-              return <div key={`asd-${index}`}>asd</div>;
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+            <div>Nih mo pilih yang mana cok</div>
+            {gameState.board.tiles.map((tile, index) => {
+              return <div key={`asd-${index}`}>{JSON.stringify(tile)}</div>;
             })}
             <div>
               <button
+                className="bg-blue-600 rounded text-white px-4 py-2"
                 onClick={() => {
-                  socket.emit(GameEvent.FREE_PARKING_PICK_TILE);
+                  socket.emit(GameEvent.FREE_PARKING_PICK_TILE, 0);
                 }}
               >
                 ok
@@ -177,7 +195,7 @@ export const useGameState = (
       console.log(`Received event ${GameEvent.PROBLEM}`);
       // setProblem(problem);
       gameStateDispatcher({
-        type: GameEvent.FREE_PARKING_PICK_TILE,
+        type: GameEvent.PROBLEM,
         payload: (
           <div>
             nih masalah

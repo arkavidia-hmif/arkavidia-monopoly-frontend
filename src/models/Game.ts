@@ -13,4 +13,5 @@ export interface GameStateObject {
   pawnList: Pawn[];
   board: Board;
   dialog: React.ReactNode;
+  canSelect: boolean;
 }
