@@ -36,7 +36,7 @@ const GameTile: React.FC<Props> = ({ tile, pawns, canSelect, index }) => {
         >
           {tile.type}
         </div>
-        <div className="flex flex-col w-full h-full items-center justify-center">
+        <div className="flex flex-col w-full h-full items-center justify-between p-2">
           <div className="text-sm">
             <div className="flex font-bold">
               <div>
@@ -46,17 +46,17 @@ const GameTile: React.FC<Props> = ({ tile, pawns, canSelect, index }) => {
             </div>
           </div>
           <div className="text-sm">{tile.multiplier}</div>
+          {canSelect && (
+            <button
+              className="bg-blue-600 rounded text-white px-2 py-1"
+              onClick={() => {
+                socket?.emit(GameEvent.FREE_PARKING_PICK_TILE, index);
+              }}
+            >
+              Move
+            </button>
+          )}
         </div>
-        {canSelect && (
-          <button
-            className="bg-blue-600 rounded text-white px-4 py-2"
-            onClick={() => {
-              socket?.emit(GameEvent.FREE_PARKING_PICK_TILE, index);
-            }}
-          >
-            Move
-          </button>
-        )}
         {/* <div className="text-sm">
           {tile.problem &&
             `

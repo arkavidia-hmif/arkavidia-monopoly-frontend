@@ -155,20 +155,7 @@ export const useGameState = (
         type: GameEvent.FREE_PARKING_PICK_TILE,
         payload: (
           <div className="flex flex-col items-center rounded border border-gray-400 p-4">
-            <div>Nih mo pilih yang mana cok</div>
-            {gameState.board.tiles.map((tile, index) => {
-              return <div key={`asd-${index}`}>{JSON.stringify(tile)}</div>;
-            })}
-            <div>
-              <button
-                className="bg-blue-600 rounded text-white px-4 py-2"
-                onClick={() => {
-                  socket.emit(GameEvent.FREE_PARKING_PICK_TILE, 0);
-                }}
-              >
-                ok
-              </button>
-            </div>
+            <div className="font-bold">Choose wisely.</div>
           </div>
         ),
       });
