@@ -12,6 +12,5 @@ export interface GameStateObject {
   state: GameState;
   pawnList: Pawn[];
   board: Board;
-  turn: number;
   dialog: React.ReactNode;
 }

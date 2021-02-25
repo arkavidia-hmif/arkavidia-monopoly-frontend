@@ -13,19 +13,19 @@ type QuestionForm = {
 };
 
 const ProblemCard: React.FC<Props> = ({ problem }: Props) => {
-  const { emitEvent } = useContext(MonopolyContext);
-  const { handleSubmit, register, reset } = useForm();
-  const onSubmit = (data: QuestionForm) => {
-    emitEvent && emitEvent<number>(GameEvent.ANSWER_PROBLEM, data.answer);
-    reset();
-  };
+  // const { emitEvent } = useContext(MonopolyContext);
+  // const { handleSubmit, register, reset } = useForm();
+  // const onSubmit = (data: QuestionForm) => {
+  //   emitEvent && emitEvent<number>(GameEvent.ANSWER_PROBLEM, data.answer);
+  //   reset();
+  // };
 
   return (
     <div className="p-4">
       <div className="font-bold text-lg">Pertanyaan!</div>
       <div>{problem.statement}</div>
       <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {/* <form onSubmit={handleSubmit(onSubmit)}>
           <input name="answer" ref={register} />
           <button
             type="submit"
@@ -33,7 +33,7 @@ const ProblemCard: React.FC<Props> = ({ problem }: Props) => {
           >
             Submit
           </button>
-        </form>
+        </form> */}
       </div>
     </div>
   );

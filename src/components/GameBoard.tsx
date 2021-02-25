@@ -1,16 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { MonopolyContext } from '~/contexts/MonopolyContext';
 import { Board } from '~/models/Board';
 import { Pawn } from '~/models/Pawn';
 import GameTile from './GameTile';
 
-interface Props {
-  board: Board;
-  pawns: Pawn[];
-}
-
-const GameBoard: React.FC<Props> = ({ board, pawns }: Props) => {
+const GameBoard: React.FC = () => {
+  const gameState = useContext(MonopolyContext);
   const pawnInTile = (index: number): Pawn | null => {
-    for (const p of pawns) {
+    for (const p of gameState.pawnList) {
       if (p.position === index) return p;
     }
     return null;
@@ -25,7 +22,12 @@ const GameBoard: React.FC<Props> = ({ board, pawns }: Props) => {
     }
     return result;
   };
-  return <div className="flex p-2">{generateBoard(board)}</div>;
+  return (
+    <div className="flex p-2">
+      <div>{generateBoard(gameState.board)}</div>
+      <div>{gameState.dialog}</div>
+    </div>
+  );
 };
 
 export default GameBoard;

@@ -25,49 +25,47 @@ export const gameStateReducer = (
   action: GameStateAction
 ): GameStateObject => {
   if (action.type === GameEvent.PAWN_LIST) {
-    gameState = {
+    return {
       ...gameState,
       pawnList: action.payload as Pawn[],
     };
-  }
-
-  if (action.type === GameEvent.END_TURN) {
-    gameState = { ...gameState, dialog: action.payload };
-    // return gameState;
-  }
-
-  if (action.type === GameEvent.START_TURN) {
-    gameState = {
+  } else if (action.type === GameEvent.END_TURN) {
+    return { ...gameState, dialog: action.payload };
+  } else if (action.type === GameEvent.MOVE) {
+    return {
       ...gameState,
       state: GameState.MOVE,
       dialog: action.payload,
     };
-    return gameState;
   } else if (action.type === GameEvent.PROPERTY_TILE) {
-    gameState = {
+    return {
       ...gameState,
       state: GameState.PROBLEM,
       dialog: action.payload,
     };
-    return gameState;
   } else if (action.type === GameEvent.FREE_PARKING_TILE) {
-    gameState = {
+    return {
       ...gameState,
       state: GameState.PICKING_TILE,
       dialog: action.payload,
     };
-    return gameState;
   } else if (action.type === GameEvent.FREE_PARKING_PICK_TILE) {
-    gameState = { ...gameState, state: GameState.IDLE, dialog: action.payload };
-    return gameState;
+    return {
+      ...gameState,
+      state: GameState.IDLE,
+      dialog: action.payload,
+    };
   } else if (
     action.type === GameEvent.CORRECT_ANSWER ||
     action.type === GameEvent.WRONG_ANSWER
   ) {
-    gameState = { ...gameState, state: GameState.IDLE, dialog: action.payload };
-    return gameState;
+    return {
+      ...gameState,
+      state: GameState.IDLE,
+      dialog: action.payload,
+    };
   }
-  return gameState;
+  return { ...gameState };
 };
 
 export const useGameState = (
@@ -90,13 +88,13 @@ export const useGameState = (
     // On receiving pawn list
     socket.on(GameEvent.PAWN_LIST, (pawns: Pawn[]) => {
       console.log(`Received event ${GameEvent.PAWN_LIST}`);
-      // setPawnList(pawns);
+      console.log(pawns);
       gameStateDispatcher({ type: GameEvent.PAWN_LIST, payload: pawns });
     });
 
     // On receiving event to move
     socket.on(GameEvent.MOVE, (diceCount: number) => {
-      console.log(`Received event ${GameEvent.MOVE}`);
+      console.log(`Received event ${GameEvent.MOVE}, ${diceCount}`);
 
       // Player is allowed to play
       gameStateDispatcher({
@@ -107,7 +105,7 @@ export const useGameState = (
             <div>
               <button
                 onClick={() => {
-                  socket.emit(GameEvent.MOVE);
+                  socket.emit(GameEvent.MOVE, diceCount);
                 }}
               >
                 ok
@@ -128,9 +126,14 @@ export const useGameState = (
       socket.emit(GameEvent.PRISON_TILE);
     });
 
-    socket.on(GameEvent.FREE_PARKING_TILE, (tiles: Tile[]) => {
-      console.log(`Received event ${GameEvent.FREE_PARKING_TILE}`);
+    socket.on(GameEvent.FREE_PARKING_TILE, () => {
+      socket.emit(GameEvent.FREE_PARKING_TILE);
+    });
+
+    socket.on(GameEvent.FREE_PARKING_PICK_TILE, (tiles: Tile[]) => {
+      console.log(`Received event ${GameEvent.FREE_PARKING_PICK_TILE}`);
       // setSelectingTile(true);
+      console.log(tiles);
       gameStateDispatcher({
         type: GameEvent.FREE_PARKING_PICK_TILE,
         payload: (

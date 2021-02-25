@@ -25,8 +25,10 @@ const MonopolyContextProvider: React.FC<Props> = ({ board, children }) => {
   });
 
   useEffect(() => {
+    console.log('asd');
     socket?.emit(GameEvent.START_TURN);
   }, []);
+
   return (
     <MonopolyContext.Provider value={gameState}>
       {children}
