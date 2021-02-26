@@ -9,21 +9,62 @@ interface Props {
   pawns?: Pawn[] | null;
   canSelect: boolean;
   index: number;
+  owner: Pawn | null;
 }
 
-const GameTile: React.FC<Props> = ({ tile, pawns, canSelect, index }) => {
+const getTileContents = (tile: Tile, owner: Pawn | null) => {
+  if (tile.type === TileType.POWER_UP) {
+    return (
+      <div className="p-2">
+        <img src="/assets/powerup.png" />
+      </div>
+    );
+  } else if (tile.type === TileType.PROPERTY) {
+    return (
+      <>
+        <div className="font-bold">Pts: {tile.price}</div>
+        <div className="">x{tile.multiplier}</div>
+        <div className="flex items-center text-xs">
+          <div className="pr-1">
+            <div
+              className="w-2 h-2 rounded-full"
+              style={{
+                backgroundColor: owner ? owner.color : '',
+              }}
+            />
+          </div>
+          <div className="italic">{owner && owner.playerName}</div>
+        </div>
+      </>
+    );
+  } else if (tile.type === TileType.START) {
+    return <div>start tile my boy</div>;
+  } else {
+    return null;
+  }
+};
+
+const GameTile: React.FC<Props> = ({
+  tile,
+  pawns,
+  canSelect,
+  index,
+  owner,
+}) => {
   const socket = useContext(SocketContext);
   return (
-    <div className="flex flex-col justify-end">
+    <div className="flex flex-col justify-end items-center">
       <div className="flex p-2">
         {pawns &&
           pawns.map((pawn, index) => {
             return (
-              <div
-                className="w-4 h-4 rounded-full border-2 border-black mx-0.5"
-                style={{ backgroundColor: pawn.color }}
-                key={`pawn-${index}`}
-              />
+              <div className="" key={`pawn-${index}`}>
+                <div>{pawn.totalPoints}</div>
+                <div
+                  className="w-4 h-4 rounded-full border-2 border-black mx-0.5"
+                  style={{ backgroundColor: pawn.color }}
+                />
+              </div>
             );
           })}
       </div>
@@ -34,34 +75,23 @@ const GameTile: React.FC<Props> = ({ tile, pawns, canSelect, index }) => {
             backgroundColor: tile.group ? (tile.group as string) : '',
           }}
         >
-          {tile.type}
+          {tile.type === TileType.PROPERTY ? tile.name : tile.type}
         </div>
-        <div className="flex flex-col w-full h-full items-center justify-between p-2">
-          <div className="text-sm">
-            <div className="flex font-bold">
-              <div>
-                {tile.type === TileType.PROPERTY ? 'Pts: ' : ''}
-                {tile.price}
-              </div>
-            </div>
-          </div>
-          <div className="text-sm">{tile.multiplier}</div>
-          {canSelect && (
-            <button
-              className="bg-blue-600 rounded text-white px-2 py-1"
-              onClick={() => {
-                socket?.emit(GameEvent.FREE_PARKING_PICK_TILE, index);
-              }}
-            >
-              Move
-            </button>
-          )}
+        <div className="flex flex-col w-full h-full items-center justify-center p-2">
+          {getTileContents(tile, owner)}
         </div>
-        {/* <div className="text-sm">
-          {tile.problem &&
-            `
-    ${tile.problem?.statement}: ${tile.problem?.answer}`}
-        </div> */}
+      </div>
+      <div className="w-full p-2">
+        {canSelect && (
+          <button
+            className="bg-blue-600 rounded text-white px-2 py-1 w-full"
+            onClick={() => {
+              socket?.emit(GameEvent.FREE_PARKING_PICK_TILE, index);
+            }}
+          >
+            Move
+          </button>
+        )}
       </div>
     </div>
   );
