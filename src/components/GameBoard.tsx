@@ -1,31 +1,40 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { MonopolyContext } from '~/contexts/MonopolyContext';
 import { Board } from '~/models/Board';
+import { Pawn } from '~/models/Pawn';
+import GameTile from './GameTile';
 
-interface Props {
-  board: Board;
-}
+const GameBoard: React.FC = () => {
+  const gameState = useContext(MonopolyContext);
+  const pawnsInTile = (index: number): Pawn[] | null => {
+    const result = [];
+    for (const p of gameState.pawnList) {
+      if (p.position === index) result.push(p);
+    }
+    if (result.length !== 0) return result;
+    return null;
+  };
 
-const GameBoard: React.FC<Props> = ({ board }: Props) => {
+  const generateBoard = (b: Board) => {
+    const result = [];
+    for (let i = 0; i < b.tiles.length; i++) {
+      result.push(
+        <GameTile
+          pawns={pawnsInTile(i)}
+          tile={b.tiles[i]}
+          index={i}
+          canSelect={gameState.canSelect}
+          key={`tile-${i}`}
+        />
+      );
+    }
+    return result;
+  };
+
   return (
-    <div className="flex p-2">
-      {board.tiles.map((val, index) => {
-        return (
-          <div
-            className="flex flex-col items-center p-4 mx-2 rounded border border-gray-400 shadow"
-            style={{ backgroundColor: val.group ? (val.group as string) : '' }}
-            key={`tile-${index}`}
-          >
-            <div className="font-bold">{val.type}</div>
-            <div className="text-sm">
-              {val.problem &&
-                `
-              ${val.problem?.statement}: ${val.problem?.answer}`}
-            </div>
-            <div className="text-sm">{val.price}</div>
-            <div className="text-sm">{val.multiplier}</div>
-          </div>
-        );
-      })}
+    <div className="flex flex-col items-center p-2">
+      <div className="flex">{generateBoard(gameState.board)}</div>
+      <div className="p-2">{gameState.dialog}</div>
     </div>
   );
 };

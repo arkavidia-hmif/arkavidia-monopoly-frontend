@@ -1,4 +1,6 @@
 export const GameEvent = {
+  PAWN_LIST: 'GAME_pawnList',
+
   // Turn related events
   START_TURN: 'GAME_startTurn',
   END_TURN: 'GAME_endTurn',
@@ -27,6 +29,9 @@ export const GameEvent = {
   POWER_UP_GET_PRISON: 'GAME_powerUpGetPrisonImmunity',
   POWER_UP_GET_REDUCE_POINTS: 'GAME_powerUpGetRemove',
   POWER_UP_GET_DISABLE_MULTIPLIER: 'GAME_powerUpGetDisableMultiplier',
-  POWER_UP_PICK_PROPERTY: 'GAME_powerUpPickPropertyToDisable',
+  POWER_UP_PRE_PICK_PROPERTY: 'GAME_powerUpPropertyList',
+  POWER_UP_POST_PICK_PROPERTY: 'GAME_powerUpPickProperty',
   POWER_UP_PICK_PLAYER: 'GAME_powerUpPickPlayerToRemove',
+
+  FORCE_SKIP_TURN: 'GAME_forceSkipTurn',
 };
