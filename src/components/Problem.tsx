@@ -1,16 +1,17 @@
-import React, { useContext } from 'react';
-import { useForm } from 'react-hook-form';
-import { MonopolyContext } from '~/contexts/MonopolyContext';
-import { GameEvent } from '~/events/GameEvent';
+// import React, { useContext } from 'react';
+// import { useForm } from 'react-hook-form';
+// import { MonopolyContext } from '~/contexts/MonopolyContext';
+// import { GameEvent } from '~/events/GameEvent';
+import React from 'react';
 import { Problem } from '~/models/Problem';
 
 interface Props {
   problem: Problem;
 }
 
-type QuestionForm = {
-  answer: number;
-};
+// type QuestionForm = {
+//   answer: number;
+// };
 
 const ProblemCard: React.FC<Props> = ({ problem }: Props) => {
   // const { emitEvent } = useContext(MonopolyContext);

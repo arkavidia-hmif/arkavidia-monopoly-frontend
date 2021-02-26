@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { navigate, RouteComponentProps } from '@reach/router';
 import { LobbyEvent } from '~/events/LobbyEvent';
 import { Pawn } from '~/models/Pawn';
