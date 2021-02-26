@@ -13,6 +13,7 @@ export interface Tile {
   _id: string;
   type: TileType;
   problem?: Problem;
+  name?: string;
   price?: number;
   multiplier?: number;
   group?: string | null;

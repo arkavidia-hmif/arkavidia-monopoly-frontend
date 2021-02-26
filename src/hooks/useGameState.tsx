@@ -19,7 +19,8 @@ export type GameStateAction =
         | typeof GameEvent.CORRECT_ANSWER
         | typeof GameEvent.WRONG_ANSWER
         | typeof GameEvent.START_TURN
-        | typeof GameEvent.END_TURN;
+        | typeof GameEvent.END_TURN
+        | typeof GameEvent.END_GAME;
       payload: React.ReactNode;
     }
   | { type: typeof GameEvent.PAWN_LIST; payload: Pawn[] };
@@ -29,11 +30,14 @@ export const gameStateReducer = (
   action: GameStateAction
 ): GameStateObject => {
   if (action.type === GameEvent.PAWN_LIST) {
+    console.log(action.payload);
     return {
       ...gameState,
       pawnList: action.payload as Pawn[],
     };
   } else if (action.type === GameEvent.END_TURN) {
+    return { ...gameState, dialog: action.payload, canSelect: false };
+  } else if (action.type === GameEvent.END_GAME) {
     return { ...gameState, dialog: action.payload, canSelect: false };
   } else if (action.type === GameEvent.START_TURN) {
     return { ...gameState, dialog: null, canSelect: false };
@@ -282,9 +286,23 @@ export const useGameState = (
       });
     });
 
+    // On receiving event to end game
+    socket.on(GameEvent.END_GAME, () => {
+      console.log(`Received event ${GameEvent.END_GAME}`);
+      gameStateDispatcher({
+        type: GameEvent.END_GAME,
+        payload: (
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+            <div className="mb-4">Game finished!</div>
+          </div>
+        ),
+      });
+    });
+
     // ON receiving event to start turn
     socket.on(GameEvent.START_TURN, () => {
       console.log(`Received event ${GameEvent.START_TURN}`);
+      gameStateDispatcher({ type: GameEvent.START_TURN, payload: null });
       socket.emit(GameEvent.START_TURN);
     });
   }, []);

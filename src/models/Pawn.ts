@@ -5,6 +5,7 @@ export interface Pawn {
   playerName: string;
   position: number;
   color: string;
+  totalPoints: number;
   points: number;
   property: Tile[];
   prisonImmunity: 0;
