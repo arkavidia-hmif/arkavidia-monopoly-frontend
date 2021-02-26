@@ -9,9 +9,16 @@ interface Props {
   pawns?: Pawn[] | null;
   canSelect: boolean;
   index: number;
+  owner: Pawn | null;
 }
 
-const GameTile: React.FC<Props> = ({ tile, pawns, canSelect, index }) => {
+const GameTile: React.FC<Props> = ({
+  tile,
+  pawns,
+  canSelect,
+  index,
+  owner,
+}) => {
   const socket = useContext(SocketContext);
   return (
     <div className="flex flex-col justify-end">
@@ -38,14 +45,15 @@ const GameTile: React.FC<Props> = ({ tile, pawns, canSelect, index }) => {
         </div>
         <div className="flex flex-col w-full h-full items-center justify-between p-2">
           <div className="text-sm">
-            <div className="flex font-bold">
-              <div>
+            <div className="flex flex-col items-center">
+              <div className="font-bold">
                 {tile.type === TileType.PROPERTY ? 'Pts: ' : ''}
                 {tile.price}
               </div>
+              <div className="text-sm">{tile.multiplier}</div>
+              <div className="text-sm">{owner && owner.playerName}</div>
             </div>
           </div>
-          <div className="text-sm">{tile.multiplier}</div>
           {canSelect && (
             <button
               className="bg-blue-600 rounded text-white px-2 py-1"
@@ -57,11 +65,6 @@ const GameTile: React.FC<Props> = ({ tile, pawns, canSelect, index }) => {
             </button>
           )}
         </div>
-        {/* <div className="text-sm">
-          {tile.problem &&
-            `
-    ${tile.problem?.statement}: ${tile.problem?.answer}`}
-        </div> */}
       </div>
     </div>
   );

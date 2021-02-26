@@ -1,5 +1,6 @@
 import { useContext, useEffect, useReducer } from 'react';
 import Dice from '~/components/Dice';
+import ProblemCard from '~/components/Problem';
 import { SocketContext } from '~/contexts/SocketContext';
 import { GameEvent } from '~/events/GameEvent';
 import { GameState, GameStateObject } from '~/models/Game';
@@ -17,6 +18,7 @@ export type GameStateAction =
         | typeof GameEvent.PROBLEM
         | typeof GameEvent.CORRECT_ANSWER
         | typeof GameEvent.WRONG_ANSWER
+        | typeof GameEvent.START_TURN
         | typeof GameEvent.END_TURN;
       payload: React.ReactNode;
     }
@@ -33,23 +35,28 @@ export const gameStateReducer = (
     };
   } else if (action.type === GameEvent.END_TURN) {
     return { ...gameState, dialog: action.payload, canSelect: false };
+  } else if (action.type === GameEvent.START_TURN) {
+    return { ...gameState, dialog: null, canSelect: false };
   } else if (action.type === GameEvent.MOVE) {
     return {
       ...gameState,
       state: GameState.MOVE,
       dialog: action.payload,
+      canSelect: false,
     };
   } else if (action.type === GameEvent.PROBLEM) {
     return {
       ...gameState,
       state: GameState.PROBLEM,
       dialog: action.payload,
+      canSelect: false,
     };
   } else if (action.type === GameEvent.FREE_PARKING_TILE) {
     return {
       ...gameState,
       state: GameState.PICKING_TILE,
       dialog: action.payload,
+      canSelect: false,
     };
   } else if (action.type === GameEvent.FREE_PARKING_PICK_TILE) {
     return {
@@ -66,6 +73,7 @@ export const gameStateReducer = (
       ...gameState,
       state: GameState.IDLE,
       dialog: action.payload,
+      canSelect: false,
     };
   }
   return { ...gameState };
@@ -91,7 +99,6 @@ export const useGameState = (
     // On receiving pawn list
     socket.on(GameEvent.PAWN_LIST, (pawns: Pawn[]) => {
       console.log(`Received event ${GameEvent.PAWN_LIST}`);
-      console.log(pawns);
       gameStateDispatcher({ type: GameEvent.PAWN_LIST, payload: pawns });
     });
 
@@ -184,18 +191,8 @@ export const useGameState = (
       gameStateDispatcher({
         type: GameEvent.PROBLEM,
         payload: (
-          <div>
-            nih masalah
-            <div>{problem.statement}</div>
-            <div>
-              <button
-                onClick={() => {
-                  socket.emit(GameEvent.ANSWER_PROBLEM, problem.answer);
-                }}
-              >
-                answer hehe
-              </button>
-            </div>
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+            <ProblemCard problem={problem} />
           </div>
         ),
       });
@@ -205,18 +202,44 @@ export const useGameState = (
       console.log(`Received event ${GameEvent.CORRECT_ANSWER}`);
       gameStateDispatcher({
         type: GameEvent.CORRECT_ANSWER,
-        payload: null,
+        payload: (
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+            <div className="mb-4">Correct! You got this property!</div>
+            <div>
+              <button
+                className="bg-blue-600 rounded text-white px-4 py-2"
+                onClick={() => {
+                  socket.emit(GameEvent.CORRECT_ANSWER);
+                }}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        ),
       });
-      socket.emit(GameEvent.CORRECT_ANSWER);
     });
 
     socket.on(GameEvent.WRONG_ANSWER, () => {
       console.log(`Received event ${GameEvent.WRONG_ANSWER}`);
       gameStateDispatcher({
         type: GameEvent.WRONG_ANSWER,
-        payload: null,
+        payload: (
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+            <div className="mb-4">Wrong answer, better luck next time!</div>
+            <div>
+              <button
+                className="bg-blue-600 rounded text-white px-4 py-2"
+                onClick={() => {
+                  socket.emit(GameEvent.WRONG_ANSWER);
+                }}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        ),
       });
-      socket.emit(GameEvent.WRONG_ANSWER);
     });
 
     socket.on(GameEvent.POWER_UP_GET_ADD_POINTS, () => {
@@ -241,9 +264,22 @@ export const useGameState = (
       console.log(`Received event ${GameEvent.END_TURN}`);
       gameStateDispatcher({
         type: GameEvent.END_TURN,
-        payload: <div>{message || 'turn finish'}</div>,
+        payload: (
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+            <div className="mb-4">{message || 'Your turn is up!'}</div>
+            <div>
+              <button
+                className="bg-blue-600 rounded text-white px-4 py-2"
+                onClick={() => {
+                  socket.emit(GameEvent.END_TURN);
+                }}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        ),
       });
-      socket.emit(GameEvent.END_TURN);
     });
 
     // ON receiving event to start turn
