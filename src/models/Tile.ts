@@ -10,6 +10,7 @@ export enum TileType {
 }
 
 export interface Tile {
+  _id: string;
   type: TileType;
   problem?: Problem;
   price?: number;

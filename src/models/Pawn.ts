@@ -1,10 +1,12 @@
+import { Tile } from './Tile';
+
 export interface Pawn {
   playerId: string;
   playerName: string;
   position: number;
   color: string;
   points: number;
-  property: string[];
+  property: Tile[];
   prisonImmunity: 0;
   isPrisoner: boolean;
 }
