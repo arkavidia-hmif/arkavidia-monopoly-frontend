@@ -14,30 +14,8 @@ type BoardForm = {
 };
 
 const LobbyPage: React.FC<RouteComponentProps> = () => {
-  const pawnDummy: Pawn[] = [
-    {
-      playerId: '1',
-      playerName: 'Donald Trump',
-      position: 1,
-      color: 'red',
-      points: 3,
-      property: [],
-      prisonImmunity: 0,
-      isPrisoner: false,
-    },
-    {
-      playerId: '2',
-      playerName: 'Joe Biden',
-      position: 1,
-      color: 'blue',
-      points: 3,
-      property: [],
-      prisonImmunity: 0,
-      isPrisoner: false,
-    },
-  ];
-  const [players, setPlayers] = useState<Pawn[]>(pawnDummy);
   const socket = useContext(SocketContext);
+  const [players, setPlayers] = useState<Pawn[]>([]);
   const { register, handleSubmit } = useForm();
   const { data } = useQuery(
     'boards',

@@ -8,9 +8,9 @@ interface Props {
   problem: Problem;
 }
 
-// type QuestionForm = {
-//   answer: number;
-// };
+type QuestionForm = {
+  answer: number;
+};
 
 const ProblemCard: React.FC<Props> = ({ problem }: Props) => {
   const socket = useContext(SocketContext);
