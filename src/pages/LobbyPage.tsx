@@ -2,7 +2,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-//   useMemo,
+  //   useMemo,
   useState,
 } from 'react';
 import { navigate, RouteComponentProps } from '@reach/router';
@@ -20,29 +20,7 @@ type BoardForm = {
 };
 
 const LobbyPage: React.FC<RouteComponentProps> = () => {
-  const pawnDummy: Pawn[] = [
-    {
-      playerId: '1',
-      playerName: 'Donald Trump',
-      position: 1,
-      color: 'red',
-      points: 3,
-      property: [],
-      prisonImmunity: 0,
-      isPrisoner: false,
-    },
-    {
-      playerId: '2',
-      playerName: 'Joe Biden',
-      position: 1,
-      color: 'blue',
-      points: 3,
-      property: [],
-      prisonImmunity: 0,
-      isPrisoner: false,
-    },
-  ];
-  const [players, setPlayers] = useState<Pawn[]>(pawnDummy);
+  const [players, setPlayers] = useState<Pawn[]>([]);
   const socket = useContext(SocketContext);
   const { register, handleSubmit } = useForm();
   const { data } = useQuery(
