@@ -2,7 +2,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
+//   useMemo,
   useState,
 } from 'react';
 import { navigate, RouteComponentProps } from '@reach/router';
@@ -22,7 +22,7 @@ const LobbyPage: React.FC<RouteComponentProps> = () => {
   const [players, setPlayers] = useState<Pawn[]>([]);
   const socket = useContext(SocketContext);
   const { register, handleSubmit } = useForm();
-  const { data, isLoading } = useQuery(
+  const { data } = useQuery(
     'boards',
     async () =>
       (await axios.get(`${process.env.REACT_APP_API_URL}/api/board`))
