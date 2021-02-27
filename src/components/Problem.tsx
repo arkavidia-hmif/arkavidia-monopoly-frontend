@@ -23,7 +23,7 @@ const ProblemCard: React.FC<Props> = ({ problem }: Props) => {
   return (
     <div className="p-4">
       <div className="font-bold text-lg">Pertanyaan!</div>
-      <div>{problem.statement}</div>
+      <div style={{ whiteSpace: 'pre-line' }}>{problem.statement}</div>
       <div className="p-2">
         <form
           onSubmit={handleSubmit(onSubmit)}
