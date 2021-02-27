@@ -12,6 +12,22 @@ interface Props {
   owner: Pawn | null;
 }
 
+const getTileTitle = (tile: Tile): string => {
+  if (tile.type === TileType.POWER_UP) {
+    return '';
+  } else if (tile.type === TileType.PROPERTY) {
+    return tile.name as string;
+  } else if (tile.type === TileType.START) {
+    return '';
+  } else if (tile.type === TileType.JAIL) {
+    return 'Go to Jail!';
+  } else if (tile.type === TileType.PARKING) {
+    return 'Parking';
+  } else {
+    return '';
+  }
+};
+
 const getTileContents = (tile: Tile, owner: Pawn | null) => {
   if (tile.type === TileType.POWER_UP) {
     return (
@@ -38,7 +54,23 @@ const getTileContents = (tile: Tile, owner: Pawn | null) => {
       </>
     );
   } else if (tile.type === TileType.START) {
-    return <div>start tile my boy</div>;
+    return (
+      <div className="">
+        <img src="/assets/start.png" />
+      </div>
+    );
+  } else if (tile.type === TileType.JAIL) {
+    return (
+      <div className="">
+        <img src="/assets/jail.png" />
+      </div>
+    );
+  } else if (tile.type === TileType.PARKING) {
+    return (
+      <div className="">
+        <img src="/assets/freeparking.png" />
+      </div>
+    );
   } else {
     return null;
   }
@@ -75,7 +107,8 @@ const GameTile: React.FC<Props> = ({
             backgroundColor: tile.group ? (tile.group as string) : '',
           }}
         >
-          {tile.type === TileType.PROPERTY ? tile.name : tile.type}
+          {tile.type === TileType.PROPERTY ? tile.name : ''}
+          {/* {getTileTitle(tile)} */}
         </div>
         <div className="flex flex-col w-full h-full items-center justify-center p-2">
           {getTileContents(tile, owner)}

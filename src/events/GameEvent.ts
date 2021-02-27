@@ -36,4 +36,4 @@ export const GameEvent = {
   FORCE_SKIP_TURN: 'GAME_forceSkipTurn',
 
   END_GAME: 'GAME_endGame',
-};
+} as const;
