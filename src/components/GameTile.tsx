@@ -12,22 +12,6 @@ interface Props {
   owner: Pawn | null;
 }
 
-const getTileTitle = (tile: Tile): string => {
-  if (tile.type === TileType.POWER_UP) {
-    return '';
-  } else if (tile.type === TileType.PROPERTY) {
-    return tile.name as string;
-  } else if (tile.type === TileType.START) {
-    return '';
-  } else if (tile.type === TileType.JAIL) {
-    return 'Go to Jail!';
-  } else if (tile.type === TileType.PARKING) {
-    return 'Parking';
-  } else {
-    return '';
-  }
-};
-
 const getTileContents = (tile: Tile, owner: Pawn | null) => {
   if (tile.type === TileType.POWER_UP) {
     return (

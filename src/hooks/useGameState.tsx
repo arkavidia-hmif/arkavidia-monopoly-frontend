@@ -3,7 +3,7 @@ import Dice from '~/components/Dice';
 import ProblemCard from '~/components/Problem';
 import { SocketContext } from '~/contexts/SocketContext';
 import { GameEvent } from '~/events/GameEvent';
-import { GameState, GameStateObject } from '~/models/Game';
+import { GameStateObject } from '~/models/Game';
 import { Pawn } from '~/models/Pawn';
 import { Problem } from '~/models/Problem';
 import { Tile } from '~/models/Tile';
@@ -326,7 +326,7 @@ export const useGameState = (
                 <div className="flex items-center p-1" key={`pawn-${index}`}>
                   <div
                     style={{ backgroundColor: pawn.color }}
-                    className="w-4 h-4"
+                    className="w-4 h-4 rounded-full m-1"
                   />
                   <div>{pawn.playerName}</div>
                   <button
