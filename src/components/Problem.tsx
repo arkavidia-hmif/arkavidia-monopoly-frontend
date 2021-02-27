@@ -23,7 +23,11 @@ const ProblemCard: React.FC<Props> = ({ problem }: Props) => {
   return (
     <div className="p-4">
       <div className="font-bold text-lg">Pertanyaan!</div>
-      <div style={{ whiteSpace: 'pre-line' }}>{problem.statement}</div>
+      <div>
+        {problem.statement.split('\n').map((l, index) => {
+          return <div key={`problem-line-${index}`}>{l}</div>;
+        })}
+      </div>
       <div className="p-2">
         <form
           onSubmit={handleSubmit(onSubmit)}
