@@ -38,30 +38,6 @@ const GameBoard: React.FC = () => {
         />
       );
     }
-    for (let i = 0; i < b.tiles.length; i++) {
-      result.push(
-        <GameTile
-          pawns={pawnsInTile(i)}
-          tile={b.tiles[i]}
-          index={i}
-          canSelect={gameState.canSelect}
-          key={`tile-${i}`}
-          owner={getTileOwner(i)}
-        />
-      );
-    }
-    for (let i = 0; i < b.tiles.length; i++) {
-      result.push(
-        <GameTile
-          pawns={pawnsInTile(i)}
-          tile={b.tiles[i]}
-          index={i}
-          canSelect={gameState.canSelect}
-          key={`tile-${i}`}
-          owner={getTileOwner(i)}
-        />
-      );
-    }
     return result;
   };
 
