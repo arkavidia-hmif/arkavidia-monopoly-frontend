@@ -3,7 +3,7 @@ import Dice from '~/components/Dice';
 import ProblemCard from '~/components/Problem';
 import { SocketContext } from '~/contexts/SocketContext';
 import { GameEvent } from '~/events/GameEvent';
-import { GameState, GameStateObject } from '~/models/Game';
+import { GameStateObject } from '~/models/Game';
 import { Pawn } from '~/models/Pawn';
 import { Problem } from '~/models/Problem';
 import { Tile } from '~/models/Tile';
