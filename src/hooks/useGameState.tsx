@@ -326,7 +326,7 @@ export const useGameState = (
                 <div className="flex items-center p-1" key={`pawn-${index}`}>
                   <div
                     style={{ backgroundColor: pawn.color }}
-                    className="w-4 h-4"
+                    className="w-4 h-4 rounded-full m-1"
                   />
                   <div>{pawn.playerName}</div>
                   <button
