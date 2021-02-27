@@ -24,7 +24,7 @@ const ProblemCard: React.FC<Props> = ({ problem }: Props) => {
     <div className="p-4">
       <div className="font-bold text-lg">Pertanyaan!</div>
       <div>
-        {problem.statement.split('\n').map((l, index) => {
+        {problem.statement.split('\\n').map((l, index) => {
           return <div key={`problem-line-${index}`}>{l}</div>;
         })}
       </div>
