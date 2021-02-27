@@ -74,8 +74,9 @@ const GameTile: React.FC<Props> = ({
         {pawns &&
           pawns.map((pawn, index) => {
             return (
-              <div className="" key={`pawn-${index}`}>
-                <div>{pawn.totalPoints}</div>
+              <div className="flex flex-col items-center" key={`pawn-${index}`}>
+                <div className="text-sm font-bold">{pawn.playerName}</div>
+                <div className="text-sm italic">{pawn.totalPoints}</div>
                 <div
                   className="w-4 h-4 rounded-full border-2 border-black mx-0.5"
                   style={{ backgroundColor: pawn.color }}

@@ -212,7 +212,7 @@ export const useGameState = (
 
     socket.on(GameEvent.POWER_UP_GET_ADD_POINTS, () => {
       console.log(`Received event ${GameEvent.POWER_UP_GET_ADD_POINTS}`);
-      const points = Math.floor(Math.random() * 100) + 50;
+      const points = Math.floor(Math.random() * 10) + 5;
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
@@ -241,7 +241,7 @@ export const useGameState = (
 
     socket.on(GameEvent.POWER_UP_PICK_PLAYER, (pawnList: Pawn[]) => {
       console.log(`Received event ${GameEvent.POWER_UP_PICK_PLAYER}`);
-      const points = Math.floor(Math.random() * 100) + 50;
+      const points = Math.floor(Math.random() * 10) + 5;
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
