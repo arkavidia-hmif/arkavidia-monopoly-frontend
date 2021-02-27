@@ -8,24 +8,6 @@ import { Pawn } from '~/models/Pawn';
 import { Problem } from '~/models/Problem';
 import { Tile } from '~/models/Tile';
 
-// export type GameStateAction =
-//   | {
-//       type:
-//         | typeof GameEvent.MOVE
-//         | typeof GameEvent.PROPERTY_TILE
-//         | typeof GameEvent.FREE_PARKING_TILE
-//         | typeof GameEvent.POWER_UP_GET_ADD_POINTS
-//         | typeof GameEvent.FREE_PARKING_PICK_TILE
-//         | typeof GameEvent.PROBLEM
-//         | typeof GameEvent.CORRECT_ANSWER
-//         | typeof GameEvent.WRONG_ANSWER
-//         | typeof GameEvent.START_TURN
-//         | typeof GameEvent.END_TURN
-//         | typeof GameEvent.END_GAME;
-//       payload: React.ReactNode;
-//     }
-//   | { type: typeof GameEvent.PAWN_LIST; payload: Pawn[] };
-
 export type GameStateAction =
   | { type: 'setDialog'; payload: React.ReactNode }
   | { type: 'setSelect'; payload: boolean }
@@ -42,60 +24,6 @@ export const gameStateReducer = (
   } else if (action.type === 'setPawnList') {
     return { ...gameState, pawnList: action.payload };
   }
-
-  // if (action.type === GameEvent.PAWN_LIST) {
-  //   console.log(action.payload);
-  //   return {
-  //     ...gameState,
-  //     pawnList: action.payload as Pawn[],
-  //   };
-  // } else if (
-  //   action.type === GameEvent.END_TURN ||
-  //   action.type === GameEvent.END_GAME
-  // ) {
-  //   return { ...gameState, dialog: action.payload, canSelect: false };
-  // } else if (action.type === GameEvent.START_TURN) {
-  //   return { ...gameState, dialog: null, canSelect: false };
-  // } else if (action.type === GameEvent.MOVE) {
-  //   return {
-  //     ...gameState,
-  //     state: GameState.MOVE,
-  //     dialog: action.payload,
-  //     canSelect: false,
-  //   };
-  // } else if (action.type === GameEvent.PROBLEM) {
-  //   return {
-  //     ...gameState,
-  //     state: GameState.PROBLEM,
-  //     dialog: action.payload,
-  //     canSelect: false,
-  //   };
-  // } else if (action.type === GameEvent.FREE_PARKING_TILE) {
-  //   return {
-  //     ...gameState,
-  //     state: GameState.PICKING_TILE,
-  //     dialog: action.payload,
-  //     canSelect: false,
-  //   };
-  // } else if (action.type === GameEvent.FREE_PARKING_PICK_TILE) {
-  //   return {
-  //     ...gameState,
-  //     state: GameState.IDLE,
-  //     dialog: action.payload,
-  //     canSelect: true,
-  //   };
-  // } else if (
-  //   action.type === GameEvent.CORRECT_ANSWER ||
-  //   action.type === GameEvent.WRONG_ANSWER
-  // ) {
-  //   return {
-  //     ...gameState,
-  //     state: GameState.IDLE,
-  //     dialog: action.payload,
-  //     canSelect: false,
-  //   };
-  // }
-
   return { ...gameState };
 };
 
@@ -130,7 +58,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <div className="flex">
               {diceCount < 6 ? (
                 <div className="p-1">
@@ -185,7 +113,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <div className="font-bold">Choose wisely.</div>
           </div>
         ),
@@ -231,7 +159,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <ProblemCard problem={problem} />
           </div>
         ),
@@ -243,7 +171,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <div className="mb-4">Correct! You got this property!</div>
             <div>
               <button
@@ -265,7 +193,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <div className="mb-4">Wrong answer, better luck next time!</div>
             <div>
               <button
@@ -288,7 +216,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <div className="mb-4">You got {points} points!</div>
             <div>
               <button
@@ -317,7 +245,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <div className="mb-4">
               Select player to be reduced by {points} points:
             </div>
@@ -360,7 +288,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <div className="mb-4">You got &quot;Prison Immunity&quot;!</div>
             <div>
               <button
@@ -383,7 +311,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <div className="mb-4">{message || 'Your turn is up!'}</div>
             <div>
               <button
@@ -406,7 +334,7 @@ export const useGameState = (
       gameStateDispatcher({
         type: 'setDialog',
         payload: (
-          <div className="flex flex-col items-center rounded border border-gray-400 p-4">
+          <div className="flex flex-col items-center rounded border border-gray-400 p-4 bg-white">
             <div className="mb-4">Game finished!</div>
           </div>
         ),
